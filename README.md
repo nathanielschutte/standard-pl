@@ -1,4 +1,5 @@
-# standard-pl
+# standard-pl repo for SPGN
+## Standard Program Graphics Engine
 standard library for C++ programs/games with graphics
 
 ## ...
