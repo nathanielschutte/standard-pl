@@ -5,6 +5,9 @@
 #define SPGNTYPES_H
 
 namespace sp {
+
+	typedef uint64_t tick_t;
+
 	enum class SPGN_STATUS {
 		OK = 1,
 		ERROR = -1,

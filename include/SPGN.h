@@ -11,6 +11,8 @@
 namespace sp {
 
 	// universal stuff
+
+	//static const pixel_t WHITE(255, 255, 255), BLACK(0, 0, 0);
 }
 
 #endif

@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\IProgram.cpp" />
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\TestProgram.cpp" />
   </ItemGroup>
   <ItemGroup>

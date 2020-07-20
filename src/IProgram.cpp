@@ -9,9 +9,14 @@ bool IProgram::init() { return false; }
 void IProgram::update(const float time_delta) { return; }
 void IProgram::render() { return; }
 void IProgram::clean() { return; }
+void IProgram::handleEvents() { return; }
 
 /* Outermost program initialization */
 SPGN_STATUS IProgram::create(uint32_t width, uint32_t height, bool fullscreen) {
+
+	mScreenWidth = width;
+	mScreenHeight = height;
+	mFullscreen = fullscreen;
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
 		consoleLog("SDL systems initialized...");
@@ -48,16 +53,18 @@ SPGN_STATUS IProgram::create(uint32_t width, uint32_t height, bool fullscreen) {
 	return SPGN_STATUS::OK;
 }
 
-void IProgram::handleEvents() {
-	SDL_Event event;
-	SDL_PollEvent(&event);
+void IProgram::SPGN_handleEvents() {
 
-	switch (event.type) {
-	case SDL_QUIT:
-		mRunning = false;
-		break;
-	default:
-		break;
+	SDL_Event event;
+	while (SDL_PollEvent(&event) > 0) {
+
+		switch (event.type) {
+		case SDL_QUIT:
+			mRunning = false;
+			break;
+		default:
+			break;
+		}
 	}
 }
 
@@ -71,16 +78,18 @@ SPGN_STATUS IProgram::start() {
 
 	// loop (update/render)
 	while (mRunning) {
-		handleEvents();
-		update(1.0);
-		render();
+		SPGN_handleEvents();
+		SPGN_update(1.0);
+		SPGN_render();
+
+		consoleLog(std::to_string(mTime).c_str());
+
+		mTime++;
+		SDL_Delay(10);
 	}
 
 	clean();
-
-	SDL_DestroyWindow(sdlWindow);
-	SDL_DestroyRenderer(sdlRender);
-	SDL_Quit();
+	SPGN_clean();
 
 	consoleLog("SDL cleaned up");
 
@@ -88,4 +97,32 @@ SPGN_STATUS IProgram::start() {
 }
 
 
+void IProgram::SPGN_update(const float time_delta) {
+	update(time_delta);
+}
 
+void IProgram::SPGN_render() {
+	render();
+}
+
+void IProgram::SPGN_clean() {
+	SDL_DestroyWindow(sdlWindow);
+	SDL_DestroyRenderer(sdlRender);
+	SDL_Quit();
+}
+
+
+SDL_Renderer* IProgram::getRender() {
+	return sdlRender;
+}
+SDL_Window* IProgram::getWindow() {
+	return sdlWindow;
+}
+
+uint32_t IProgram::getScreenWidth() {
+	return mScreenWidth;
+}
+
+uint32_t IProgram::getScreenHeight() {
+	return mScreenHeight;
+}
